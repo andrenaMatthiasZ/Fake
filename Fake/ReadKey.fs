@@ -7,24 +7,20 @@ open System.Diagnostics
 
 type KeyDirection = Down | Up | Left | Right
 
-type Direction =
-    | Some of KeyDirection
-    | None
-
-type Key = 
+type KnownKeys = 
     | Esc 
     | Arrow of KeyDirection
 
 type KeyPressed =
-    | KnownKey of Key
-    | Other
+    | KnownKey of KnownKeys
+    | None
 
-let getKeyPressed (keyInfo:ConsoleKeyInfo) =
-    let key = keyInfo.Key
+let getKeyPressed (keyInfoProvider: unit->ConsoleKey) =
+    let key = keyInfoProvider()
     match key with
     | ConsoleKey.Escape -> KnownKey(Esc)
     | ConsoleKey.DownArrow -> KnownKey(Arrow(Down))
     | ConsoleKey.UpArrow -> KnownKey(Arrow(Up))
     | ConsoleKey.LeftArrow -> KnownKey(Arrow(Left))
     | ConsoleKey.RightArrow -> KnownKey(Arrow(Right))
-    | _ -> Other
+    | _ -> None
