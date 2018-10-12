@@ -24,3 +24,17 @@ let getKeyPressed (keyInfoProvider: unit->ConsoleKey) =
     | ConsoleKey.LeftArrow -> KnownKey(Arrow(Left))
     | ConsoleKey.RightArrow -> KnownKey(Arrow(Right))
     | _ -> None
+
+let clearInput =
+   let action = fun ()-> while (Console.KeyAvailable) do
+                            Console.ReadKey(true) |> ignore
+   action
+
+let keyInfoProvider = 
+   fun () -> 
+       if Console.KeyAvailable then
+           let action = fun ()-> Console.ReadKey(true)
+           let consoleKeyInfo = action()
+           consoleKeyInfo.Key
+       else
+           ConsoleKey.A
