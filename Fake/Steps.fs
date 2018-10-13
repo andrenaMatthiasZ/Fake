@@ -6,17 +6,19 @@ open System.Windows.Input
 open System.Diagnostics
 open System.Threading
 open ReadKey
-  
+open Game
+open Drawing  
+
 type Direction =
     | Some of KeyDirection
     | None
 
-type StepCount = int
-type Game = { steps: StepCount }
+
 
 
 
 let rec doNextStep keyPressedProvider game = 
+    drawGame()
     (clearInput())
     Thread.Sleep(1000)
     let {steps=lastStep} = game

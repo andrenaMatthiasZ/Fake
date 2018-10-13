@@ -3,6 +3,7 @@
 
 open ReadKey
 open Steps
+open Game
 
  
     

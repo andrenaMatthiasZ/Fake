@@ -6,7 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Game.fs" />
     <Compile Include="ReadKey.fs" />
+    <Compile Include="Drawing.fs" />
     <Compile Include="Steps.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
