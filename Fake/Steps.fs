@@ -21,7 +21,7 @@ let rec doNextStep keyPressedProvider game =
     drawGame()
     (clearInput())
     Thread.Sleep(1000)
-    let {steps=lastStep} = game
+    let {steps=lastStep; snake=lastSnake} = game
     let nextStep = lastStep + 1
     Console.WriteLine("next step: {0}",nextStep)
 
@@ -31,11 +31,11 @@ let rec doNextStep keyPressedProvider game =
         match knownKey with
         | Esc _ ->
             Console.WriteLine("Esc")
-            {steps = nextStep}
+            {steps = nextStep;snake=lastSnake}
 
         | Arrow _-> 
             Console.WriteLine("Arrow")
-            doNextStep keyPressedProvider {steps = nextStep}
+            doNextStep keyPressedProvider {steps = nextStep;snake=lastSnake}
     | KeyPressed.None _ ->
         Console.WriteLine("Other or none")
-        doNextStep keyPressedProvider {steps = nextStep}
+        doNextStep keyPressedProvider {steps = nextStep;snake=lastSnake}
