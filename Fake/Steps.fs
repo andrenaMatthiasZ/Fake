@@ -18,7 +18,7 @@ type Direction =
 
 
 let rec doNextStep keyPressedProvider game = 
-    drawGame()
+    drawGame game
     (clearInput())
     Thread.Sleep(1000)
     let {steps=lastStep; snake=lastSnake} = game
