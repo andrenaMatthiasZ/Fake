@@ -8,24 +8,38 @@ type Symbol =
     | Wall
     | Empty
     | SnakeHead 
+    | SnakeBody
 
 
 type Field = Symbol*Position
 
 let createSymbol gameState position = 
     let symbol = 
-        
-        let positionIsWall = position |> checkIfPositionInWall gameState
-        if positionIsWall then
+        let {snake=snake} = gameState
+        let {head=head; body=body} = snake
+        let {headPosition = headPosition;direction = _} = head;
+
+        let isHead position= 
+            headPosition = position;
+
+        let isBody position = 
+                let hasSamePosition position segment =
+                    let {position = segmentPosition}= segment
+                    position = segmentPosition
+                let isCurrentPosition = hasSamePosition position
+                body  |>  List.exists isCurrentPosition
+
+        let isWall position = 
+            position |> checkIfPositionInWall gameState
+
+        if isWall position then
             Wall
-        else 
-            let {snake=snake} = gameState
-            let {head=head} = snake
-            let {position = headPosition} = head;
-            if headPosition = position then
-                SnakeHead
-            else
-                Empty
+        else if isHead position then
+            SnakeHead
+        else if isBody position then
+            SnakeBody
+        else
+            Empty
             
     (position,symbol)
 
@@ -53,6 +67,7 @@ let drawBoard gameBoard =
                 | Wall _ -> '#'
                 | Empty _ -> ' '
                 | SnakeHead _ -> 'o'
+                | SnakeBody _ -> 'x'
             Console.Write character
         Console.WriteLine "" 
 

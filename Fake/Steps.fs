@@ -28,10 +28,10 @@ let changeHeadDirectionTo direction game =
         | Finished _ -> game 
         | Running state ->
             let  {size = size; steps=steps;snake=snake} =state
-            let {head=head;tail=tail} = snake
-            let {position = position} = head;
-            let newhead = {position=position; direction=direction}
-            let newSnake = {head=newhead;tail=tail}
+            let {head=head;body=tail} = snake
+            let {headPosition = position; direction = _} = head;
+            let newhead = {headPosition=position; direction=direction}
+            let newSnake = {head=newhead;body=tail}
             Running {size=size;steps=steps;snake=newSnake}
 
 
@@ -69,11 +69,11 @@ let moveSnake game  =
         | Finished _ -> game
         | Running state ->
             let {size= size;steps=steps; snake=lastSnake} = state
-            let {head = head; tail=tail} = lastSnake
-            let {direction = direction; position = position} = head
+            let {head = head; body=tail} = lastSnake
+            let {direction = direction; headPosition = position} = head
             let newPosition = computeNewPosition position direction
-            let newHead = {position = newPosition; direction = direction}
-            let newSnake = {head=newHead; tail=tail}
+            let newHead = {headPosition = newPosition; direction = direction}
+            let newSnake = {head=newHead; body=tail}
            
             let positionValidity = computePositionValidity state newPosition
             match positionValidity with
