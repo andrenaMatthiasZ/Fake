@@ -13,7 +13,8 @@ type Symbol =
 type Field = Symbol*Position
 
 let drawGame game = 
-    let {snake = snake} = game
+    let {snake = snake; size = size} = game
+    let {width = width; height= height} = size
     let xPositions =  [ 1..width ]
     let yPositions = [ 1..height]
     let gameField = [
