@@ -24,7 +24,7 @@ let drawGame game =
 
                 let symbol = 
                     let position = {x=x;y=y}
-                    let positionIsWall = x=1 || y=1 || x = width || y = height
+                    let positionIsWall = checkIfPositionInWall game position
                     if positionIsWall then
                         Wall
                     else 

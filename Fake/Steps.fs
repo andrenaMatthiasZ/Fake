@@ -50,6 +50,12 @@ let consumeKeyPressed keyPressed game =
                     Running(state) |> changeHeadDirection
             | OptionalKey.None _ ->
                 Running state  
+            
+type ReasonForInvalidPosition = 
+    | CollisionWithWall
+type PositionValidity =
+    | Valid
+    | Invalid of ReasonForInvalidPosition
 
 let moveSnake game  =      
     match game with
