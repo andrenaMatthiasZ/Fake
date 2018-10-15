@@ -8,3 +8,10 @@ type Snake = {head : SnakeSegment; tail : SnakeSegment list}
 type Size = {width: int; height: int}
 type gameState = {size: Size; steps: StepCount; snake: Snake }
 
+let initialGameState = 
+    let startPosition = {x=3;y=3}
+    let startHead = {position = startPosition; direction = Right}
+    let startSnake = {head= startHead ;tail=[]}
+    let size = {width= 8; height = 7}
+    {size = size; steps = 1; snake = startSnake} 
+    
