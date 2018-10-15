@@ -6,12 +6,16 @@ type Direction = Down | Up | Left | Right
 type SnakeSegment = {position: Position; direction: Direction}
 type Snake = {head : SnakeSegment; tail : SnakeSegment list}
 type Size = {width: int; height: int}
-type gameState = {size: Size; steps: StepCount; snake: Snake }
+type Reason = EscapePressed
+type State =
+    | Running
+    | Abborted of Reason
+type GameState = {size: Size; steps: StepCount; snake: Snake; state: State }
 
 let initialGameState = 
     let startPosition = { x=3; y=3}
     let startHead = {position = startPosition; direction = Right}
     let startSnake = {head= startHead ;tail=[]}
     let size = {width= 8; height = 7}
-    {size = size; steps = 1; snake = startSnake} 
+    {size = size; steps = 1; snake = startSnake; state = Running} 
     
