@@ -70,6 +70,13 @@ let computeNewHead head =
     let newPosition = computeNewPosition position direction
     {headPosition = newPosition; direction = direction}
 
+let computeNewBody snake =
+    let {head=head; body = body} = snake
+    let {headPosition = headPosition} = head
+    let fullSnake = {position=headPosition}::body
+    fullSnake |> List.rev |> List.tail |> List.rev
+        
+
 let moveSnake game  =      
     match game with
         | Finished _ -> game
@@ -77,7 +84,8 @@ let moveSnake game  =
             let {size= size;steps=steps; snake=lastSnake} = state
             let {head = head; body=tail} = lastSnake
             let newHead = head |> computeNewHead 
-            let newSnake= {head=newHead; body=tail}
+            let newBody = lastSnake |> computeNewBody
+            let newSnake= {head=newHead; body=newBody}
             let newState = {size=size;steps = steps ;snake=newSnake}
 
             match computeHeadValidity newState with
