@@ -14,6 +14,12 @@ type SomeOrNoneDirection =
     | Some of Direction
     | None
 
+let directionsAreInverse firstDirection secondDirection =
+    match firstDirection with
+        | Up -> secondDirection = Down
+        | Down -> secondDirection = Up
+        | Left -> secondDirection = Right
+        | Right -> secondDirection = Left
 
 let changeHeadDirectionTo direction game =
     match game with
@@ -21,7 +27,7 @@ let changeHeadDirectionTo direction game =
         | Running state ->
             let  {size = size; steps=steps;snake=snake} =state
             let {head=head;body=tail} = snake
-            let {headPosition = position; direction = directionLastStep} = head;
+            let {headPosition = position} = head;
             let newhead = {headPosition=position; direction=direction}
             let newSnake = {head=newhead;body=tail}
             Running {size=size;steps=steps;snake=newSnake}
@@ -38,8 +44,12 @@ let consumeKeyPressed keyPressed game =
                     let game = {state= state; reason=EscapePressed}
                     Finished game
                 | Arrow direction-> 
-                    let changeHeadDirection = changeHeadDirectionTo direction
-                    Running(state) |> changeHeadDirection
+                    let  {snake = {head={direction = oldDirection}}} = state
+                    if directionsAreInverse direction oldDirection then
+                        Running state
+                    else
+                        let changeHeadDirection = changeHeadDirectionTo direction
+                        Running state |> changeHeadDirection
             | OptionalKey.None _ ->
                 Running state  
 
