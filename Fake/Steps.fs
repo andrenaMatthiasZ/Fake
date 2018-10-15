@@ -15,15 +15,13 @@ type SomeOrNoneDirection =
     | None
 
 
-
-
 let changeHeadDirectionTo direction game =
     match game with
         | Finished _ -> game 
         | Running state ->
             let  {size = size; steps=steps;snake=snake} =state
             let {head=head;body=tail} = snake
-            let {headPosition = position; direction = _} = head;
+            let {headPosition = position; direction = directionLastStep} = head;
             let newhead = {headPosition=position; direction=direction}
             let newSnake = {head=newhead;body=tail}
             Running {size=size;steps=steps;snake=newSnake}

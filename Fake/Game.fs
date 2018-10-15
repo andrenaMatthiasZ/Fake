@@ -7,7 +7,7 @@ type SnakeSegment = {position: Position}
 type SnakeHead = {headPosition: Position; direction: Direction}
 type Snake = {head : SnakeHead; body : SnakeSegment list}
 type Size = {width: int; height: int}
-type Reason = EscapePressed | CollisionWithWall
+type Reason = EscapePressed | CollisionWithWall | CollisionWithBody
 type State =
     | Running
     | Abborted of Reason
@@ -36,3 +36,13 @@ let checkIfPositionInWall gameState position =
     let {width = width; height= height} = size
     let {x=x;y=y} = position
     x=1 || y=1 || x = width || y = height
+
+let hasSamePosition position segment =
+                    let {position = segmentPosition}= segment
+                    position = segmentPosition
+
+let checkIfPositionIsInBody gameState position =
+    let {snake = {body=body}} = gameState
+    let positionExists = position |> hasSamePosition |> List.exists
+    body |> positionExists
+

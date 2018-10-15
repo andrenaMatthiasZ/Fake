@@ -12,7 +12,8 @@ let main argv =
 
     match reason with  
         | EscapePressed ->  Console.WriteLine "Escape pressed."
-        | CollisionWithWall -> Console.WriteLine "Collision with wall"
+        | CollisionWithWall -> Console.WriteLine "Collision with wall."
+        | CollisionWithBody -> Console.WriteLine "Don't bite yourself."
 
     Console.WriteLine "Closing game ..."
     Thread.Sleep(1000)

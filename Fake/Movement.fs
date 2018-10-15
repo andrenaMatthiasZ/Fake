@@ -5,6 +5,7 @@ open Game
             
 type ReasonForInvalidPosition = 
     | CollisionWithWall
+    | CollisionWithBody
 type PositionValidity =
     | Valid
     | Invalid of ReasonForInvalidPosition
@@ -16,13 +17,17 @@ let computeNewPosition position direction =
     | Right _ -> {x = x+1; y = y}
     | Down _-> {x = x; y = y+1}
     | Left _ -> {x = x-1; y = y}
+    
 
 let computeHeadValidity state = 
-                let {snake={head={headPosition=position}}} = state
-                let positionIsInWall = checkIfPositionInWall state position
-                if positionIsInWall then 
-                    Invalid(CollisionWithWall)
-                else 
+                let {snake={head={headPosition=headPosition}}} = state
+                let isInWall = checkIfPositionInWall state
+                let isInBody = checkIfPositionIsInBody state
+                if isInWall headPosition then 
+                    Invalid CollisionWithWall
+                else if isInBody headPosition then
+                    Invalid CollisionWithBody
+                else
                     Valid
 
 
@@ -55,7 +60,12 @@ let moveSnake game  =
             match computeHeadValidity newState with
                 | Valid _ ->   
                     Running newState
-                | Invalid _ -> 
-                    Finished {state = state; reason = Reason.CollisionWithWall}
+                | Invalid invalidReason -> 
+                    let reason =
+                        match invalidReason with 
+                        | CollisionWithWall _ -> Reason.CollisionWithWall
+                        | CollisionWithBody _ -> Reason.CollisionWithBody
+                    Finished {state = state; reason = reason}
+                     
                     
      

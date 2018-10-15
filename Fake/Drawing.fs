@@ -23,9 +23,6 @@ let createSymbol gameState position =
             headPosition = position;
 
         let isBody position = 
-                let hasSamePosition position segment =
-                    let {position = segmentPosition}= segment
-                    position = segmentPosition
                 let isCurrentPosition = hasSamePosition position
                 body  |>  List.exists isCurrentPosition
 
