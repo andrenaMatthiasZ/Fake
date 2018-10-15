@@ -18,10 +18,11 @@ type Game =
     | Running of GameState
     | Finished of FinishedGame
 
-let initialGame = 
+let initialState = 
     let startPosition = { x=3; y=3}
     let startHead = {position = startPosition; direction = Right}
     let startSnake = {head= startHead ;tail=[]}
     let size = {width= 8; height = 7}
     {size = size; steps = 1; snake = startSnake} 
     
+let initialGame = Running(initialState)
