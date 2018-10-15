@@ -62,8 +62,7 @@ let rec doNextStep keyPressedProvider game =
         | Arrow direction-> 
             Console.WriteLine(direction)
             let changeHeadDirection = changeHeadDirectionTo direction
-            doNextStep keyPressedProvider (moveSnake (changeHeadDirection game))
+            game |> changeHeadDirection |> moveSnake |> doNextStep keyPressedProvider
     | OptionalKey.None _ ->
         Console.WriteLine("Other or none")
-        let nextGameState = moveSnake game
-        doNextStep keyPressedProvider nextGameState
+        game |> moveSnake |> doNextStep keyPressedProvider
