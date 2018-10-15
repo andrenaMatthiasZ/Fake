@@ -4,12 +4,12 @@ open System
 open System.Windows
 open System.Windows.Input
 open System.Diagnostics
+open Game
 
-type KeyDirection = Down | Up | Left | Right
 
 type KnownKeys = 
     | Esc 
-    | Arrow of KeyDirection
+    | Arrow of Direction
 
 type KeyPressed =
     | KnownKey of KnownKeys

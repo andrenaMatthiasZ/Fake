@@ -29,7 +29,8 @@ let drawGame game =
                         Wall
                     else 
                     let {head=head} = snake
-                    if head=position then
+                    let {position = headPosition} = head;
+                    if headPosition = position then
                             SnakeHead
                     else
                         Empty

@@ -9,13 +9,19 @@ open ReadKey
 open Game
 open Drawing  
 
-type Direction =
-    | Some of KeyDirection
+type SomeOrNoneDirection =
+    | Some of Direction
     | None
 
 
 
-
+ let computeNewPosition position direction = 
+    let {x=x;y=y} = position
+    match direction with
+    | Up _ -> {x=x;y=y+1}
+    | Right _ -> {x=x+1;y=y}
+    | Down _-> {x=x;y=y-1}
+    | Left _ -> {x=x-1;y=y}
 
 let rec doNextStep keyPressedProvider game = 
     drawGame game
@@ -38,4 +44,11 @@ let rec doNextStep keyPressedProvider game =
             doNextStep keyPressedProvider {size=size;steps = nextStep;snake=lastSnake}
     | KeyPressed.None _ ->
         Console.WriteLine("Other or none")
-        doNextStep keyPressedProvider {size=size;steps = nextStep;snake=lastSnake}
+        let {head = head; tail=tail} = lastSnake
+        let {direction = direction; position = position} = head
+      
+        let newPosition = computeNewPosition position direction
+        Console.WriteLine(newPosition)
+        let newHead = {position = newPosition;direction=direction}
+        let newSnake = {head=newHead;tail=tail}
+        doNextStep keyPressedProvider {size=size;steps = nextStep;snake=newSnake}
