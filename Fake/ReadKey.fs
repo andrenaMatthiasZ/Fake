@@ -5,6 +5,7 @@ open System.Windows
 open System.Windows.Input
 open System.Diagnostics
 open Game
+open System.Threading
 
 
 type Key = 
@@ -29,6 +30,12 @@ let clearInput =
    let action = fun ()-> while (Console.KeyAvailable) do
                             Console.ReadKey(true) |> ignore
    action
+
+let clearInputWithDelay = fun()->
+    Thread.Sleep(900)
+    (clearInput())
+    Thread.Sleep(100)
+ 
 
 let keyInfoProvider = 
    fun () -> 

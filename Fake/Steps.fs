@@ -69,12 +69,6 @@ let moveSnake game  =
             let newSnake = {head=newHead; tail=tail}
             Running {size=size;steps = steps ;snake=newSnake}
            
-let createOutPut = fun state->
-    drawGame state
-    Thread.Sleep(900)
-    (clearInput())
-    Thread.Sleep(100)
-
 
 let increaseStepCount game =
     match game with 
@@ -83,10 +77,12 @@ let increaseStepCount game =
             let {size= size;steps=lastStep; snake=snake} = state
             Running {size = size; steps = lastStep+1;snake= snake}
 
+
 let rec doNextStep keyPressedProvider game = 
     match game with 
         | Finished finishedGame -> finishedGame
         | Running state ->
-            createOutPut state
+            drawGame state
+            clearInputWithDelay()
             let changeDirection = keyPressedProvider |> getKeyPressed |> consumeKeyPressed
             Running(state) |> changeDirection |> moveSnake |> increaseStepCount |> doNextStep keyPressedProvider
