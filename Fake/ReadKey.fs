@@ -19,11 +19,11 @@ type OptionalKey =
 let getKeyPressed (keyInfoProvider: unit->ConsoleKey) =
     let key = keyInfoProvider()
     match key with
-    | ConsoleKey.Escape -> KnownKey(Esc)
-    | ConsoleKey.DownArrow -> KnownKey(Arrow(Down))
-    | ConsoleKey.UpArrow -> KnownKey(Arrow(Up))
-    | ConsoleKey.LeftArrow -> KnownKey(Arrow(Left))
-    | ConsoleKey.RightArrow -> KnownKey(Arrow(Right))
+    | ConsoleKey.Escape -> Esc |> KnownKey
+    | ConsoleKey.DownArrow -> Down |> Arrow |> KnownKey 
+    | ConsoleKey.UpArrow -> Up |> Arrow |> KnownKey
+    | ConsoleKey.LeftArrow -> Left |> Arrow |> KnownKey
+    | ConsoleKey.RightArrow -> Right |> Arrow |> KnownKey
     | _ -> None
 
 let clearInput =
