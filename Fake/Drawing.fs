@@ -9,15 +9,17 @@ type Symbol =
     | Empty
     | SnakeHead 
     | SnakeBody
+    | Food
 
 
 type Field = Symbol*Position
 
 let createSymbol gameState position = 
     let symbol = 
-        let {snake=snake} = gameState
-        let {head=head; body=body} = snake
-        let {headPosition = headPosition;direction = _} = head;
+        let {snake=snake; foodOption=foodOption} = gameState
+        let {head={headPosition = headPosition;direction = _}; body=body} = snake
+        
+        let isFood = checkIfIsFood foodOption
 
         let isHead position= 
             headPosition = position;
@@ -31,6 +33,8 @@ let createSymbol gameState position =
 
         if isWall position then
             Wall
+        else if isFood position then
+            Food
         else if isHead position then
             SnakeHead
         else if isBody position then
@@ -61,10 +65,11 @@ let drawBoard gameBoard =
             let character = 
                 let (_,symbol) = field
                 match symbol with
-                | Wall _ -> '#'
-                | Empty _ -> ' '
-                | SnakeHead _ -> 'o'
-                | SnakeBody _ -> 'x'
+                | Wall -> '#'
+                | Empty -> ' '
+                | SnakeHead -> 'o'
+                | SnakeBody -> 'x'
+                | Food -> 'ö'
             Console.Write character
         Console.WriteLine "" 
 

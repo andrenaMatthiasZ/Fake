@@ -50,12 +50,12 @@ let moveSnake game  =
     match game with
         | Finished _ -> game
         | Running state ->
-            let {size= size;steps=steps; snake=lastSnake} = state
+            let {size= size;steps=steps; snake=lastSnake;foodOption = foodOption} = state
             let {head = head; body=tail} = lastSnake
             let newHead = head |> computeNewHead 
             let newBody = lastSnake |> computeNewBody
             let newSnake= {head=newHead; body=newBody}
-            let newState = {size=size;steps = steps ;snake=newSnake}
+            let newState = {size=size;steps = steps ; snake=newSnake; foodOption = foodOption}
 
             match computeHeadValidity newState with
                 | Valid _ ->   

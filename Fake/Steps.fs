@@ -25,12 +25,12 @@ let changeHeadDirectionTo direction game =
     match game with
         | Finished _ -> game 
         | Running state ->
-            let  {size = size; steps=steps;snake=snake} =state
+            let  {size = size; steps=steps;snake=snake; foodOption = foodOption} =state
             let {head=head;body=tail} = snake
             let {headPosition = position} = head;
             let newhead = {headPosition=position; direction=direction}
             let newSnake = {head=newhead;body=tail}
-            Running {size=size;steps=steps;snake=newSnake}
+            Running {size=size;steps=steps;snake=newSnake; foodOption = foodOption}
 
 
 let consumeKeyPressed keyPressed game =
@@ -60,8 +60,8 @@ let increaseStepCount game =
     match game with 
         | Finished _ -> game
         | Running state ->
-            let {size= size;steps=lastStep; snake=snake} = state
-            Running {size = size; steps = lastStep+1;snake= snake}
+            let {size= size;steps=lastStep; snake=snake; foodOption = foodOption} = state
+            Running {size = size; steps = lastStep+1;snake= snake; foodOption = foodOption}
 
 
 let rec doNextStep keyPressedProvider game = 

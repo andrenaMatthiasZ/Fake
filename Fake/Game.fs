@@ -8,11 +8,15 @@ type SnakeHead = {headPosition: Position; direction: Direction}
 type Snake = {head : SnakeHead; body : SnakeSegment list}
 type Size = {width: int; height: int}
 type Reason = EscapePressed | CollisionWithWall | CollisionWithBody
+type Food = {foodPosition: Position}
+type FoodOption =
+    | Some of Food
+    | None
 type State =
     | Running
     | Abborted of Reason
 
-type GameState = {size: Size; steps: StepCount; snake: Snake}
+type GameState = {size: Size; steps: StepCount; snake: Snake; foodOption: FoodOption}
 
 type FinishedGame = {state : GameState;reason: Reason}
 type Game =
@@ -26,7 +30,7 @@ let initialState =
     let secondSegment = {position = {x=4;y=2}}
     let startSnake = {head= startHead ;body = firstSegment::secondSegment::[]}
     let size = {width= 8; height = 7}
-    {size = size; steps = 1; snake = startSnake} 
+    {size = size; steps = 1; snake = startSnake; foodOption = Some {foodPosition = {x=6;y=5} }} 
     
 let initialGame = Running(initialState)
 
@@ -46,3 +50,7 @@ let checkIfPositionIsInBody gameState position =
     let positionExists = position |> hasSamePosition |> List.exists
     body |> positionExists
 
+let checkIfIsFood foodOption position = 
+    match foodOption with 
+        | Some {foodPosition=foodPosition} -> foodPosition = position
+        | None -> false
