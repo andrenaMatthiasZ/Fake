@@ -39,10 +39,10 @@ let drawGame game =
             ]
         ]
       
-    Console.WriteLine()
-    Console.WriteLine()
-    Console.WriteLine("Number of steps: {0}",steps)
-    Console.WriteLine()
+    Console.WriteLine "" 
+    Console.WriteLine "" 
+    Console.WriteLine ("Number of steps: {0}",steps)
+    Console.WriteLine "" 
 
     for line in gameField do
         for field in line do
@@ -52,8 +52,8 @@ let drawGame game =
                 | Wall _ -> '#'
                 | Empty _ -> ' '
                 | SnakeHead _ -> 'o'
-            Console.Write(character)
-        Console.WriteLine("")
+            Console.Write character
+        Console.WriteLine "" 
 
     
 

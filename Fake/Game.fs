@@ -6,7 +6,7 @@ type Direction = Down | Up | Left | Right
 type SnakeSegment = {position: Position; direction: Direction}
 type Snake = {head : SnakeSegment; tail : SnakeSegment list}
 type Size = {width: int; height: int}
-type Reason = EscapePressed
+type Reason = EscapePressed | CollisionWithWall
 type State =
     | Running
     | Abborted of Reason
