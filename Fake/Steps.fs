@@ -53,7 +53,8 @@ let rec doNextStep keyPressedProvider game =
 
         | Arrow _-> 
             Console.WriteLine("Arrow")
-            doNextStep keyPressedProvider {size=size;steps = nextStep;snake=lastSnake}
+            let nextGameState = moveSnake game
+            doNextStep keyPressedProvider nextGameState
     | KeyPressed.None _ ->
         Console.WriteLine("Other or none")
 
