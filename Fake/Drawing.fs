@@ -7,7 +7,7 @@ open System.Drawing
 type Symbol =
     | Wall
     | Empty
-    | SnakeHead
+    | SnakeHead 
 
 
 type Field = Symbol*Position
@@ -23,7 +23,8 @@ let drawGame game =
 
                 let symbol = 
                     let position = {x=x;y=y}
-                    if x=1 || y=1 || x = width || y = height then
+                    let positionIsWall = x=1 || y=1 || x = width || y = height
+                    if positionIsWall then
                         Wall
                     else 
                     let {head=head} = snake
