@@ -13,7 +13,7 @@ type Symbol =
 type Field = Symbol*Position
 
 let drawGame game = 
-    let {snake = snake; size = size} = game
+    let {snake = snake; size = size; steps = steps} = game
     let {width = width; height= height} = size
     let xPositions =  [ 1..width ]
     let yPositions = [ 1..height]
@@ -38,7 +38,11 @@ let drawGame game =
                 ({x=x;y=y},symbol)
             ]
         ]
-        
+      
+    Console.WriteLine()
+    Console.WriteLine()
+    Console.WriteLine("Number of steps: {0}",steps)
+    Console.WriteLine()
 
     for line in gameField do
         for field in line do

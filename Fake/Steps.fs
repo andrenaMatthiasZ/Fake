@@ -34,6 +34,23 @@ let changeHeadDirectionTo direction game =
             let newSnake = {head=newhead;tail=tail}
             Running {size=size;steps=steps;snake=newSnake}
 
+
+let consumeKeyPressed keyPressed game =
+    match game with 
+        | Finished _ -> game
+        | Running state -> 
+            match keyPressed with
+            | KnownKey knownKey -> 
+                match knownKey with
+                | Esc _ ->
+                    let game = {state= state; reason=EscapePressed}
+                    Finished game
+                | Arrow direction-> 
+                    let changeHeadDirection = changeHeadDirectionTo direction
+                    Running(state) |> changeHeadDirection
+            | OptionalKey.None _ ->
+                Running state  
+
 let moveSnake game  =      
     match game with
         | Finished _ -> game
@@ -46,32 +63,24 @@ let moveSnake game  =
             let newSnake = {head=newHead; tail=tail}
             Running {size=size;steps = steps ;snake=newSnake}
            
+let createOutPut = fun state->
+    drawGame state
+    Thread.Sleep(900)
+    (clearInput())
+    Thread.Sleep(100)
+
+
+let increaseStepCount game =
+    match game with 
+        | Finished _ -> game
+        | Running state ->
+            let {size= size;steps=lastStep; snake=snake} = state
+            Running {size = size; steps = lastStep+1;snake= snake}
 
 let rec doNextStep keyPressedProvider game = 
     match game with 
         | Finished finishedGame -> finishedGame
         | Running state ->
-            drawGame state
-            Thread.Sleep(900)
-            (clearInput())
-            Thread.Sleep(100)
-            let {size= size;steps=lastStep; snake=lastSnake} = state
-            let nextStep = lastStep + 1
-            Console.WriteLine("next step: {0}",nextStep)
-
-            let keyPressed = getKeyPressed keyPressedProvider
-            match keyPressed with
-            | KnownKey knownKey -> 
-                match knownKey with
-                | Esc _ ->
-                    let state = {size=size;steps = nextStep;snake=lastSnake}
-                    let game = {state= state; reason=EscapePressed}
-                    doNextStep keyPressedProvider (Finished(game))
-
-                | Arrow direction-> 
-                    Console.WriteLine(direction)
-                    let changeHeadDirection = changeHeadDirectionTo direction
-                    Running(state) |> changeHeadDirection |> moveSnake |> doNextStep keyPressedProvider
-            | OptionalKey.None _ ->
-                Console.WriteLine("Other or none")
-                Running(state) |> moveSnake |> doNextStep keyPressedProvider
+            createOutPut state
+            let changeDirection = keyPressedProvider |> getKeyPressed |> consumeKeyPressed
+            Running(state) |> changeDirection |> moveSnake |> increaseStepCount |> doNextStep keyPressedProvider
