@@ -54,7 +54,20 @@ let consumeKeyPressed keyPressed game =
                 Running state  
 
      
-           
+let removeFood game = 
+    match game with
+        | Finished _-> game
+        | Running state ->
+            let {size=size; steps = steps; snake = snake; foodOption = foodOption} = state
+            match foodOption with 
+                | FoodOption.Some food -> 
+                    let {head = {headPosition=headPosition}} = snake
+                    if checkIfIsFood foodOption headPosition then   
+                        Running {size=size; snake=snake;steps=steps; foodOption = FoodOption.None}
+                    else
+                        Running state
+                | FoodOption.None -> Running state
+
 
 let increaseStepCount game =
     match game with 
@@ -71,4 +84,4 @@ let rec doNextStep keyPressedProvider game =
             drawGame state
             clearInputWithDelay()
             let changeDirection = keyPressedProvider |> getKeyPressed |> consumeKeyPressed
-            Running(state) |> changeDirection |> moveSnake |> increaseStepCount |> doNextStep keyPressedProvider
+            Running(state) |> changeDirection |> moveSnake |> removeFood |> increaseStepCount |> doNextStep keyPressedProvider
