@@ -24,16 +24,16 @@ let computeNewPosition position direction =
     | Left _ -> {x = x-1; y = y}
 
 let changeHeadDirectionTo direction game =
-    let  {size = size; steps=steps;snake=snake;state=state} =game
+    let  {size = size; steps=steps;snake=snake} =game
     let {head=head;tail=tail} = snake
     let {position = position} = head;
     let newhead = {position=position; direction=direction}
     let newSnake = {head=newhead;tail=tail}
-    {size=size;steps=steps;snake=newSnake; state=state}
+    {size=size;steps=steps;snake=newSnake}
 
 
 let moveSnake game =      
-            let {size= size;steps=lastStep; snake=lastSnake; state=state} = game
+            let {size= size;steps=lastStep; snake=lastSnake} = game
             let {head = head; tail=tail} = lastSnake
             let {direction = direction; position = position} = head
       
@@ -41,7 +41,7 @@ let moveSnake game =
             Console.WriteLine(newPosition)
             let newHead = {position = newPosition; direction = direction}
             let newSnake = {head=newHead; tail=tail}
-            {size=size;steps = lastStep+1 ;snake=newSnake; state = state}
+            {size=size;steps = lastStep+1 ;snake=newSnake}
 
 let rec doNextStep keyPressedProvider game = 
     drawGame game
@@ -57,7 +57,8 @@ let rec doNextStep keyPressedProvider game =
     | KnownKey knownKey -> 
         match knownKey with
         | Esc _ ->
-            {size=size;steps = nextStep;snake=lastSnake; state = Abborted(EscapePressed)}
+            let state = {size=size;steps = nextStep;snake=lastSnake}
+            {state= state;reason=EscapePressed}
 
         | Arrow direction-> 
             Console.WriteLine(direction)

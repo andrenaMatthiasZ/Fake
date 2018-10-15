@@ -8,10 +8,7 @@ open System
 let main argv =
     Console.WriteLine("Press escape key to close.")
 
-    let {state = state} = doNextStep keyInfoProvider initialGameState
-    match state with
-        | Abborted reason -> Console.WriteLine("Escape pressed")
-        | Running _ -> Console.WriteLine("This should never happen.")
+    let {reason=reason} = doNextStep keyInfoProvider initialGame
     Console.WriteLine("Closing game ...")
     Thread.Sleep(1000)
     0

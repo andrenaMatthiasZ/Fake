@@ -10,12 +10,18 @@ type Reason = EscapePressed
 type State =
     | Running
     | Abborted of Reason
-type GameState = {size: Size; steps: StepCount; snake: Snake; state: State }
 
-let initialGameState = 
+type GameState = {size: Size; steps: StepCount; snake: Snake}
+
+type FinishedGame = {state : GameState;reason: Reason}
+type Game =
+    | Running of GameState
+    | Finished of FinishedGame
+
+let initialGame = 
     let startPosition = { x=3; y=3}
     let startHead = {position = startPosition; direction = Right}
     let startSnake = {head= startHead ;tail=[]}
     let size = {width= 8; height = 7}
-    {size = size; steps = 1; snake = startSnake; state = Running} 
+    {size = size; steps = 1; snake = startSnake} 
     
