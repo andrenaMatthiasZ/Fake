@@ -12,8 +12,25 @@ type Symbol =
 
 type Field = Symbol*Position
 
+let createSymbol gameState position = 
+    let symbol = 
+        
+        let positionIsWall = position |> checkIfPositionInWall gameState
+        if positionIsWall then
+            Wall
+        else 
+            let {snake=snake} = gameState
+            let {head=head} = snake
+            let {position = headPosition} = head;
+            if headPosition = position then
+                SnakeHead
+            else
+                Empty
+            
+    (position,symbol)
+
 let createGameBoard gameState =
-        let {snake = snake; size = size} = gameState
+        let { size = size} = gameState
         let {width = width; height= height} = size
         let xPositions =  [ 1..width ]
         let yPositions = [ 1..height]
@@ -21,21 +38,9 @@ let createGameBoard gameState =
         for y in yPositions ->
             [ 
                 for x in xPositions ->
-
-                let symbol = 
                     let position = {x=x; y=y}
-                    let positionIsWall = position |> checkIfPositionInWall gameState
-                    if positionIsWall then
-                        Wall
-                    else 
-                    let {head=head} = snake
-                    let {position = headPosition} = head;
-                    if headPosition = position then
-                        SnakeHead
-                    else
-                        Empty
-
-                ({x=x;y=y},symbol)
+                    position |> createSymbol gameState 
+                               
             ]
         ]
 

@@ -79,7 +79,7 @@ let moveSnake game  =
             match positionValidity with
                 | Valid _ ->   
                     Running {size=size;steps = steps ;snake=newSnake}
-                | Invalid reason -> 
+                | Invalid _ -> 
                     Finished {state = state; reason = Reason.CollisionWithWall}
                     
           
