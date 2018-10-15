@@ -7,12 +7,12 @@ open System.Diagnostics
 open Game
 
 
-type KnownKeys = 
+type Key = 
     | Esc 
     | Arrow of Direction
 
-type KeyPressed =
-    | KnownKey of KnownKeys
+type OptionalKey =
+    | KnownKey of Key
     | None
 
 let getKeyPressed (keyInfoProvider: unit->ConsoleKey) =
