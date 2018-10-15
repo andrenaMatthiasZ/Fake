@@ -57,12 +57,18 @@ type PositionValidity =
     | Valid
     | Invalid of ReasonForInvalidPosition
 
-let computePositionValidity state position = 
+let computeHeadValidity state = 
+                let {snake={head={headPosition=position}}} = state
                 let positionIsInWall = checkIfPositionInWall state position
                 if positionIsInWall then 
                     Invalid(CollisionWithWall)
                 else 
                     Valid
+
+let computeNewHead head =
+    let {direction = direction; headPosition = position} = head
+    let newPosition = computeNewPosition position direction
+    {headPosition = newPosition; direction = direction}
 
 let moveSnake game  =      
     match game with
@@ -70,15 +76,13 @@ let moveSnake game  =
         | Running state ->
             let {size= size;steps=steps; snake=lastSnake} = state
             let {head = head; body=tail} = lastSnake
-            let {direction = direction; headPosition = position} = head
-            let newPosition = computeNewPosition position direction
-            let newHead = {headPosition = newPosition; direction = direction}
-            let newSnake = {head=newHead; body=tail}
-           
-            let positionValidity = computePositionValidity state newPosition
-            match positionValidity with
+            let newHead = head |> computeNewHead 
+            let newSnake= {head=newHead; body=tail}
+            let newState = {size=size;steps = steps ;snake=newSnake}
+
+            match computeHeadValidity newState with
                 | Valid _ ->   
-                    Running {size=size;steps = steps ;snake=newSnake}
+                    Running newState
                 | Invalid _ -> 
                     Finished {state = state; reason = Reason.CollisionWithWall}
                     
