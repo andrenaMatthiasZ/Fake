@@ -2,6 +2,29 @@
 
 open Game
 
+let directionsAreInverse firstDirection secondDirection =
+    match firstDirection with
+        | Up -> secondDirection = Down
+        | Down -> secondDirection = Up
+        | Left -> secondDirection = Right
+        | Right -> secondDirection = Left
+
+let changeHeadDirectionTo direction game =
+    match game with
+        | Finished _ -> game 
+        | Running state ->
+            let  {size = size; steps=steps;snake=snake; foodOption = foodOption; points = points} =state
+            let {head=head;body=body; stomach = stomach} = snake
+            let {headPosition = position} = head;
+            let newhead = {headPosition=position; direction=direction}
+            let newSnake = {head=newhead;body=body;stomach=stomach}
+            Running {size=size;steps=steps;snake=newSnake; foodOption = foodOption; points=points}
+
+let changeHeadDirectionIfNotInversseToOldDirection oldDirection newDirection= 
+                        if directionsAreInverse newDirection oldDirection then
+                            fun(game) -> game
+                        else
+                            changeHeadDirectionTo newDirection
             
 type ReasonForInvalidPosition = 
     | CollisionWithWall
@@ -18,7 +41,6 @@ let computeNewPosition position direction =
     | Down _-> {x = x; y = y+1}
     | Left _ -> {x = x-1; y = y}
     
-
 let computeHeadValidity state = 
                 let {snake={head={headPosition=headPosition}}} = state
                 let isInWall = checkIfPositionInWall state

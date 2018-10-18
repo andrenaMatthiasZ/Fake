@@ -9,28 +9,12 @@ open ReadKey
 open Game
 open Drawing  
 open Movement
+open Feeding
 
 type SomeOrNoneDirection =
     | Some of Direction
     | None
 
-let directionsAreInverse firstDirection secondDirection =
-    match firstDirection with
-        | Up -> secondDirection = Down
-        | Down -> secondDirection = Up
-        | Left -> secondDirection = Right
-        | Right -> secondDirection = Left
-
-let changeHeadDirectionTo direction game =
-    match game with
-        | Finished _ -> game 
-        | Running state ->
-            let  {size = size; steps=steps;snake=snake; foodOption = foodOption; points = points} =state
-            let {head=head;body=body; stomach = stomach} = snake
-            let {headPosition = position} = head;
-            let newhead = {headPosition=position; direction=direction}
-            let newSnake = {head=newhead;body=body;stomach=stomach}
-            Running {size=size;steps=steps;snake=newSnake; foodOption = foodOption; points=points}
 
 
 let consumeKeyPressed keyPressed game =
@@ -45,28 +29,12 @@ let consumeKeyPressed keyPressed game =
                     Finished game
                 | Arrow direction-> 
                     let  {snake = {head={direction = oldDirection}}} = state
-                    if directionsAreInverse direction oldDirection then
-                        Running state
-                    else
-                        let changeHeadDirection = changeHeadDirectionTo direction
-                        Running state |> changeHeadDirection
+                    let changeDirection = changeHeadDirectionIfNotInversseToOldDirection oldDirection direction
+                    Running state |> changeDirection
             | OptionalKey.None _ ->
                 Running state  
 
-     
-let removeFoodIfEaten game = 
-    match game with
-        | Finished _-> game
-        | Running state ->
-            let {size=size; steps = steps; snake = snake; foodOption = foodOption; points=points} = state
-            match foodOption with 
-                | FoodOption.Some food -> 
-                    let {head = {headPosition=headPosition}} = snake
-                    if checkIfIsFood foodOption headPosition then   
-                        Running {size=size; snake=snake;steps=steps; foodOption = FoodOption.None; points=points}
-                    else
-                        Running state
-                | FoodOption.None -> Running state
+
 
 
 let increaseStepCount game =
@@ -78,19 +46,6 @@ let increaseStepCount game =
             let nextStep = lastStepCount + 1 |> StepCount
             Running {size = size; steps = nextStep;snake= snake; foodOption = foodOption; points=points}
 
-let fillStomachIfFoodInFrontOfSnakeHead game =
-    match game with 
-        | Finished _ -> game
-        | Running state ->
-            let {size=size;steps=steps;snake={head={headPosition = headPosition;direction=direction};body=body};foodOption=foodOption; points=points} = state
-            match foodOption with
-                | FoodOption.None -> game
-                | FoodOption.Some {foodPosition=foodPosition} ->
-                    let nextPosition = computeNewPosition headPosition direction
-                    if nextPosition = foodPosition then
-                        Running {size=size;steps=steps;snake={head={headPosition = headPosition;direction=direction};body=body;stomach=Full}; points = points;foodOption=foodOption}
-                    else 
-                        game
                         
 let increasePointsIfStomachFull game =
     match game with 
@@ -103,12 +58,6 @@ let increasePointsIfStomachFull game =
                         let (Points pointsValue) = points
                         Running {size=size;steps=steps;snake={head=head;body=body;stomach=stomach}; points = Points (pointsValue + 100);foodOption=foodOption}
 
-let emptyStomach game = 
-    match game with 
-        | Finished _ -> game 
-        | Running state ->
-            let {size=size;steps=steps;snake={head={headPosition = headPosition;direction=direction};body=body;};foodOption=foodOption; points=points} = state
-            Running {size=size;steps=steps;snake={head={headPosition = headPosition;direction=direction};body=body;stomach=Stomach.Empty};points=points;foodOption=foodOption}
 
 let rec doNextStep keyPressedProvider game = 
     match game with 
