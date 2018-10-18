@@ -74,10 +74,11 @@ let drawBoard gameBoard =
         Console.WriteLine "" 
 
 let drawHeader gameState =
-    let {steps = steps} = gameState
+    let {steps = steps; points= (Points points)} = gameState
     Console.WriteLine "" 
     Console.WriteLine "" 
     Console.WriteLine ("Number of steps: {0}",steps)
+    Console.WriteLine ("Points: {0}",points)
     Console.WriteLine "" 
 
 let drawGame gameState = 

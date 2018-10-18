@@ -14,8 +14,8 @@ type FoodOption = Option<Food>
 type State =
     | Running
     | Abborted of Reason
-
-type GameState = {size: Size; steps: Steps; snake: Snake; foodOption: FoodOption}
+type Points = Points of int
+type GameState = {size: Size; steps: Steps; snake: Snake; foodOption: FoodOption; points: Points}
 
 type FinishedGame = {state : GameState;reason: Reason}
 type Game =
@@ -29,7 +29,7 @@ let initialState =
     let secondSegment = {position = {x=4;y=2}}
     let startSnake = {head= startHead ;body = firstSegment::secondSegment::[]; stomach = Empty}
     let size = {width= 8; height = 7}
-    {size = size; steps = StepCount 1; snake = startSnake; foodOption = Some {foodPosition = {x=6;y=5} }} 
+    {size = size; steps = StepCount 1; snake = startSnake; foodOption = Some {foodPosition = {x=6;y=5} }; points = Points 0} 
     
 let initialGame = Running(initialState)
 
