@@ -40,11 +40,12 @@ let removeLastElement list =
     list |> List.rev |> List.tail |> List.rev
 
 let computeNewBody snake =
-    let {head=head; body = body} = snake
+    let {head=head; body = body;stomach=stomach} = snake
     let {headPosition = headPosition} = head
     let fullSnake = {position=headPosition}::body
-    fullSnake |> removeLastElement
-        
+    match stomach with 
+        | Empty ->    fullSnake |> removeLastElement
+        | Full -> fullSnake        
 
 let moveSnake game  =      
     match game with
