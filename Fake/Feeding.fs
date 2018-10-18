@@ -33,6 +33,18 @@ let removeFoodIfEaten game =
                         Running state
                 | FoodOption.None -> Running state
 
+let addFoodIfMissing game =
+    match game with 
+        | Finished _ -> game
+        | Running state ->
+            let {foodOption = foodOption} = state
+            match foodOption with 
+                | FoodOption.Some _ -> Running state
+                | FoodOption.None -> 
+                    let addFood state = 
+                        let {size=size; snake = snake; points = points;steps=steps} = state;
+                        {size=size; steps=steps;snake = snake; points = points; foodOption = Some {foodPosition = {x=3;y=3}}}
+                    state |> addFood |> Running
 let emptyStomach game = 
     match game with 
         | Finished _ -> game 

@@ -74,6 +74,7 @@ let rec doNextStep keyPressedProvider game =
                 >> increasePointsIfStomachFull
                 >> emptyStomach
                 >> removeFoodIfEaten 
+                >> addFoodIfMissing
                 >> increaseStepCount 
                 
             state |> Running |> stepsToDo |> doNextStep keyPressedProvider
