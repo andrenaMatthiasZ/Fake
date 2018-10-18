@@ -54,7 +54,7 @@ let consumeKeyPressed keyPressed game =
                 Running state  
 
      
-let removeFood game = 
+let removeFoodIfEaten game = 
     match game with
         | Finished _-> game
         | Running state ->
@@ -78,7 +78,7 @@ let increaseStepCount game =
             let nextStep = lastStepCount + 1 |> StepCount
             Running {size = size; steps = nextStep;snake= snake; foodOption = foodOption; points=points}
 
-let fillStomach game =
+let fillStomachIfFoodInFrontOfSnakeHead game =
     match game with 
         | Finished _ -> game
         | Running state ->
@@ -92,7 +92,7 @@ let fillStomach game =
                     else 
                         game
                         
-let increasePoints game =
+let increasePointsIfStomachFull game =
     match game with 
         | Finished _ -> game
         | Running state ->
@@ -116,13 +116,13 @@ let rec doNextStep keyPressedProvider game =
         | Running state ->
             drawGame state
             clearInputWithDelay()
-            let changeDirection = keyPressedProvider |> getKeyPressed |> consumeKeyPressed
+            let changeDirectionAccordingToKeyPressed = keyPressedProvider |> getKeyPressed |> consumeKeyPressed
             Running(state) 
-            |> changeDirection 
-            |> fillStomach
-            |> moveAndGrowSnake 
-            |> increasePoints
+            |> changeDirectionAccordingToKeyPressed 
+            |> fillStomachIfFoodInFrontOfSnakeHead
+            |> moveSnakeAndGrowIfStomachFull 
+            |> increasePointsIfStomachFull
             |> emptyStomach
-            |> removeFood 
+            |> removeFoodIfEaten 
             |> increaseStepCount 
             |> doNextStep keyPressedProvider
