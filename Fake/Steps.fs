@@ -91,7 +91,13 @@ let fillStomach game =
                         Running {size=size;steps=steps;snake={head={headPosition = headPosition;direction=direction};body=body;stomach=Full};foodOption=foodOption}
                     else 
                         game
-    
+
+let emptyStomach game = 
+    match game with 
+        | Finished _ -> game 
+        | Running state ->
+            let {size=size;steps=steps;snake={head={headPosition = headPosition;direction=direction};body=body;};foodOption=foodOption} = state
+            Running {size=size;steps=steps;snake={head={headPosition = headPosition;direction=direction};body=body;stomach=Stomach.Empty};foodOption=foodOption}
 
 let rec doNextStep keyPressedProvider game = 
     match game with 
@@ -103,7 +109,8 @@ let rec doNextStep keyPressedProvider game =
             Running(state) 
             |> changeDirection 
             |> fillStomach
-            |> moveSnake 
+            |> moveAndGrowSnake 
+            |> emptyStomach
             |> removeFood 
             |> increaseStepCount 
             |> doNextStep keyPressedProvider

@@ -47,7 +47,7 @@ let computeNewBody snake =
         | Empty ->    fullSnake |> removeLastElement
         | Full -> fullSnake        
 
-let moveSnake game  =      
+let moveAndGrowSnake game  =      
     match game with
         | Finished _ -> game
         | Running state ->
