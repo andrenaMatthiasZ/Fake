@@ -1,22 +1,21 @@
 ﻿module Game
 
-type StepCount = int
+type Steps = StepCount of int
 type Position = { x: int; y: int}
 type Direction = Down | Up | Left | Right
 type SnakeSegment = {position: Position}
 type SnakeHead = {headPosition: Position; direction: Direction}
-type Snake = {head : SnakeHead; body : SnakeSegment list}
+type Stomach = Full | Empty
+type Snake = {head : SnakeHead; body : SnakeSegment list; stomach: Stomach}
 type Size = {width: int; height: int}
 type Reason = EscapePressed | CollisionWithWall | CollisionWithBody
 type Food = {foodPosition: Position}
-type FoodOption =
-    | Some of Food
-    | None
+type FoodOption = Option<Food>
 type State =
     | Running
     | Abborted of Reason
 
-type GameState = {size: Size; steps: StepCount; snake: Snake; foodOption: FoodOption}
+type GameState = {size: Size; steps: Steps; snake: Snake; foodOption: FoodOption}
 
 type FinishedGame = {state : GameState;reason: Reason}
 type Game =
@@ -28,9 +27,9 @@ let initialState =
     let startHead = {headPosition = startPosition; direction = Right}
     let firstSegment = {position = {x=4;y=3}}
     let secondSegment = {position = {x=4;y=2}}
-    let startSnake = {head= startHead ;body = firstSegment::secondSegment::[]}
+    let startSnake = {head= startHead ;body = firstSegment::secondSegment::[]; stomach = Empty}
     let size = {width= 8; height = 7}
-    {size = size; steps = 1; snake = startSnake; foodOption = Some {foodPosition = {x=6;y=5} }} 
+    {size = size; steps = StepCount 1; snake = startSnake; foodOption = Some {foodPosition = {x=6;y=5} }} 
     
 let initialGame = Running(initialState)
 

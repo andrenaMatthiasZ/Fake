@@ -26,10 +26,10 @@ let changeHeadDirectionTo direction game =
         | Finished _ -> game 
         | Running state ->
             let  {size = size; steps=steps;snake=snake; foodOption = foodOption} =state
-            let {head=head;body=tail} = snake
+            let {head=head;body=body; stomach = stomach} = snake
             let {headPosition = position} = head;
             let newhead = {headPosition=position; direction=direction}
-            let newSnake = {head=newhead;body=tail}
+            let newSnake = {head=newhead;body=body;stomach=stomach}
             Running {size=size;steps=steps;snake=newSnake; foodOption = foodOption}
 
 
@@ -74,8 +74,24 @@ let increaseStepCount game =
         | Finished _ -> game
         | Running state ->
             let {size= size;steps=lastStep; snake=snake; foodOption = foodOption} = state
-            Running {size = size; steps = lastStep+1;snake= snake; foodOption = foodOption}
+            let (StepCount lastStepCount) = lastStep 
+            let nextStep = lastStepCount + 1 |> StepCount
+            Running {size = size; steps = nextStep;snake= snake; foodOption = foodOption}
 
+let fillStomach game =
+    match game with 
+        | Finished _ -> game
+        | Running state ->
+            let {size=size;steps=steps;snake={head={headPosition = headPosition;direction=direction};body=body;stomach=stomach};foodOption=foodOption} = state
+            match foodOption with
+                | FoodOption.None -> game
+                | FoodOption.Some {foodPosition=foodPosition} ->
+                    let nextPosition = computeNewPosition headPosition direction
+                    if nextPosition = foodPosition then
+                        Running {size=size;steps=steps;snake={head={headPosition = headPosition;direction=direction};body=body;stomach=Full};foodOption=foodOption}
+                    else 
+                        game
+    
 
 let rec doNextStep keyPressedProvider game = 
     match game with 
@@ -84,4 +100,10 @@ let rec doNextStep keyPressedProvider game =
             drawGame state
             clearInputWithDelay()
             let changeDirection = keyPressedProvider |> getKeyPressed |> consumeKeyPressed
-            Running(state) |> changeDirection |> moveSnake |> removeFood |> increaseStepCount |> doNextStep keyPressedProvider
+            Running(state) 
+            |> changeDirection 
+            |> fillStomach
+            |> moveSnake 
+            |> removeFood 
+            |> increaseStepCount 
+            |> doNextStep keyPressedProvider
