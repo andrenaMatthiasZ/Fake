@@ -117,12 +117,15 @@ let rec doNextStep keyPressedProvider game =
             drawGame state
             clearInputWithDelay()
             let changeDirectionAccordingToKeyPressed = keyPressedProvider |> getKeyPressed |> consumeKeyPressed
-            Running(state) 
-            |> changeDirectionAccordingToKeyPressed 
-            |> fillStomachIfFoodInFrontOfSnakeHead
-            |> moveSnakeAndGrowIfStomachFull 
-            |> increasePointsIfStomachFull
-            |> emptyStomach
-            |> removeFoodIfEaten 
-            |> increaseStepCount 
-            |> doNextStep keyPressedProvider
+            
+            let stepsToDo = 
+                changeDirectionAccordingToKeyPressed 
+                >> fillStomachIfFoodInFrontOfSnakeHead
+                >> moveSnakeAndGrowIfStomachFull 
+                >> increasePointsIfStomachFull
+                >> emptyStomach
+                >> removeFoodIfEaten 
+                >> increaseStepCount 
+                
+            state |> Running |> stepsToDo |> doNextStep keyPressedProvider
+            
