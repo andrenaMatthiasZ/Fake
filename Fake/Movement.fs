@@ -1,6 +1,7 @@
 ﻿module Movement
 
 open Game
+open GameUtil
 
 let directionsAreInverse firstDirection secondDirection =
     match firstDirection with

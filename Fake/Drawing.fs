@@ -1,8 +1,8 @@
 ﻿module Drawing
 
 open Game
+open GameUtil
 open System
-open System.Drawing
 
 type Symbol =
     | Wall

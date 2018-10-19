@@ -3,7 +3,7 @@
 open Game
 open Movement
 open System
-open System.Drawing
+open GameUtil
 
 let fillStomachIfFoodInFrontOfSnakeHead game =
     match game with 
@@ -18,8 +18,6 @@ let fillStomachIfFoodInFrontOfSnakeHead game =
                         Running {size=size;steps=steps;snake={head={headPosition = headPosition;direction=direction};body=body;stomach=Full}; points = points;foodOption=foodOption}
                     else 
                         game
-
-
 
 let removeFoodIfEaten game = 
     match game with
@@ -64,8 +62,7 @@ let removeWall size positions=
 
 let getRandomElement list = 
     let random = new Random()
-    let length = list |> List.length
-    let randomIndex = random.Next(1,length+1)
+    let randomIndex = list |> List.length |> random.Next
     list |> List.item randomIndex
 
 let getRandomFoodPosition state = 
