@@ -42,8 +42,9 @@ let computeNewPosition position direction =
     | Left _ -> {x = x-1; y = y}
     
 let computeHeadValidity state = 
-                let {snake={head={headPosition=headPosition}}} = state
-                let isInWall = checkIfPositionInWall state
+                let {snake=snake;size=size} = state
+                let {head={headPosition=headPosition}} = snake
+                let isInWall = checkIfPositionInWall size
                 let isInBody = checkIfPositionIsInBody state
                 if isInWall headPosition then 
                     Invalid CollisionWithWall

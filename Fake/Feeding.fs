@@ -54,24 +54,25 @@ let isInSnake snake position =
        let snakePositions = {position=headPosition}::body |> List.map toPosition
        snakePositions |> List.contains position
 
-let removeSnake snake positions = 
-   
+let removeSnakePositions snake positions =
     let filter = (isInSnake snake) >> not
     positions |> List.filter filter
 
-let removeWall state positions=
-    let filter  = checkIfPositionInWall state >> not
+let removeWall size positions=
+    let filter  = checkIfPositionInWall size >> not
     positions |> List.filter filter
 
+let getRandomElement list = 
+    let random = new Random()
+    let length = list |> List.length
+    let randomIndex = random.Next(1,length+1)
+    list |> List.item randomIndex
 
 let getRandomFoodPosition state = 
     let {size=size;snake = snake} = state
     let positions = createListOfAllPositions size
-    let possiblePositionsForFood = positions |> removeSnake snake |> removeWall state 
-    let random = new Random()
-    let numberOfPossiblePositions = possiblePositionsForFood |> List.length
-    let randomIndex = random.Next(1,numberOfPossiblePositions+1)
-    possiblePositionsForFood |> List.item randomIndex
+    let possiblePositionsForFood = positions |> removeSnakePositions snake |> removeWall size 
+    possiblePositionsForFood |> getRandomElement
    
 
 let addFoodIfMissing game =
@@ -87,6 +88,7 @@ let addFoodIfMissing game =
                         let foodPosition = getRandomFoodPosition state
                         {size=size; steps=steps;snake = snake; points = points; foodOption = Some {foodPosition = foodPosition}}
                     state |> addFood |> Running
+
 let emptyStomach game = 
     match game with 
         | Finished _ -> game 

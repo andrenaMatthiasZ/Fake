@@ -34,8 +34,7 @@ let initialState =
 let initialGame = Running(initialState)
 
 
-let checkIfPositionInWall gameState position =
-    let {size = size} = gameState
+let checkIfPositionInWall size position =
     let {width = width; height= height} = size
     let {x=x;y=y} = position
     x=1 || y=1 || x = width || y = height

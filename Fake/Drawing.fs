@@ -16,7 +16,7 @@ type Field = Symbol*Position
 
 let createSymbol gameState position = 
     let symbol = 
-        let {snake=snake; foodOption=foodOption} = gameState
+        let {snake=snake; foodOption=foodOption; size=size} = gameState
         let {head={headPosition = headPosition;direction = _}; body=body} = snake
         
         let isFood = checkIfIsFood foodOption
@@ -29,7 +29,7 @@ let createSymbol gameState position =
                 body  |>  List.exists isCurrentPosition
 
         let isWall position = 
-            position |> checkIfPositionInWall gameState
+            position |> checkIfPositionInWall size
 
         if isWall position then
             Wall
