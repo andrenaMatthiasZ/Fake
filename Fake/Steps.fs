@@ -1,13 +1,8 @@
 ﻿module Steps
 
-open System
-open System.Windows
-open System.Windows.Input
-open System.Diagnostics
-open System.Threading
-open ReadKey
+open Input
 open Game
-open Drawing  
+open Output  
 open Movement
 open Feeding
 
@@ -66,7 +61,6 @@ let rec doNextStep keyPressedProvider game =
             drawGame state
             clearInputWithDelay()
             let changeDirectionAccordingToKeyPressed = keyPressedProvider |> getKeyPressed |> consumeKeyPressed
-            
             let stepsToDo = 
                 changeDirectionAccordingToKeyPressed 
                 >> fillStomachIfFoodInFrontOfSnakeHead

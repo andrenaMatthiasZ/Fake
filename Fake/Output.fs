@@ -1,8 +1,9 @@
-﻿module Drawing
+﻿module Output
 
 open Game
 open GameUtil
 open System
+
 
 type Symbol =
     | Wall
@@ -20,7 +21,6 @@ let createSymbol gameState position =
         let {head={headPosition = headPosition;direction = _}; body=body} = snake
         
         let isFood = checkIfIsFood foodOption
-
         let isHead position= 
             headPosition = position;
 
@@ -87,7 +87,18 @@ let drawGame gameState =
     
 
     
+let write reason = 
+    match reason with  
+        | EscapePressed ->  Console.WriteLine "Escape pressed."
+        | InvalidPosition problem-> 
+            match problem with
+                | InvalidPosition.CollisionWithWall -> Console.WriteLine "Collision with wall."
+                | InvalidPosition.CollisionWithBody -> Console.WriteLine "Don't bite yourself."
 
+let output (text:string) = 
+    Console.WriteLine text
 
-   
-    
+let writeDescription() = 
+    output "Press escape key to close."
+let writeClosingMessage() = 
+    output "Closing game ..."

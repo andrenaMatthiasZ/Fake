@@ -1,11 +1,8 @@
-﻿module ReadKey
+﻿module Input
 
 open System
-open System.Windows
-open System.Windows.Input
-open System.Diagnostics
 open Game
-open System.Threading
+open Waiting
 
 
 type Key = 
@@ -26,16 +23,16 @@ let getKeyPressed (keyInfoProvider: unit->ConsoleKey) =
     | ConsoleKey.RightArrow -> Right |> Arrow |> KnownKey
     | _ -> None
 
-let clearInput =
-   let action = fun ()-> while (Console.KeyAvailable) do
+let clearInput() = while (Console.KeyAvailable) do
                             Console.ReadKey(true) |> ignore
-   action
+   
 
 let clearInputWithDelay = fun()->
-    Thread.Sleep(900)
-    (clearInput())
-    Thread.Sleep(100)
+    waitBeforeClearingInput()
+    clearInput()
+    waitAfterClearingInput()
  
+let defaultUnknown = ConsoleKey.A
 
 let keyInfoProvider = 
    fun () -> 
@@ -44,4 +41,5 @@ let keyInfoProvider =
            let consoleKeyInfo = action()
            consoleKeyInfo.Key
        else
-           ConsoleKey.A
+            defaultUnknown
+           

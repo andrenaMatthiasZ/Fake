@@ -6,10 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Game.fs" />
-    <Compile Include="GameUtil.fs" />
-    <Compile Include="ReadKey.fs" />
-    <Compile Include="Drawing.fs" />
+    <Compile Include="DomainTypes.fs" />
+    <Compile Include="PositionUtil.fs" />
+    <Compile Include="Util.fs" />
+    <Compile Include="Waiting.fs" />
+    <Compile Include="Input.fs" />
+    <Compile Include="Output.fs" />
     <Compile Include="Movement.fs" />
     <Compile Include="Feeding.fs" />
     <Compile Include="Steps.fs" />

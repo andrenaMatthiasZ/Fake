@@ -1,21 +1,17 @@
-﻿open ReadKey
+﻿open Input
 open Steps
 open Game
-open System.Threading
-open System
+open Waiting
+open Output
     
 [<EntryPoint>] 
-let main argv =
-    Console.WriteLine "Press escape key to close."
-
+let main _ =
+    writeDescription()
     let {reason=reason} = doNextStep keyInfoProvider initialGame
 
-    match reason with  
-        | EscapePressed ->  Console.WriteLine "Escape pressed."
-        | CollisionWithWall -> Console.WriteLine "Collision with wall."
-        | CollisionWithBody -> Console.WriteLine "Don't bite yourself."
+    write reason
+    writeClosingMessage()
 
-    Console.WriteLine "Closing game ..."
-    Thread.Sleep(1000)
+    waitForClosing()
     0
     
