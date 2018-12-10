@@ -15,12 +15,12 @@ let changeHeadDirectionTo direction game =
     match game with
         | Finished _ -> game 
         | Running state ->
-            let  {size = size; steps=steps;snake=snake; foodOption = foodOption; points = points} =state
+            let  {snake=snake} =state
             let {head=head;body=body; stomach = stomach} = snake
             let {headPosition = position} = head;
             let newhead = {headPosition=position; direction=direction}
             let newSnake = {head=newhead;body=body;stomach=stomach}
-            Running {size=size;steps=steps;snake=newSnake; foodOption = foodOption; points=points}
+            Running {state with snake=newSnake}
 
 let changeHeadDirectionIfNotInversseToOldDirection oldDirection newDirection= 
                         if directionsAreInverse newDirection oldDirection then
@@ -40,7 +40,7 @@ let computeNextPosition position direction =
 let computeNewHead head =
     let {direction = direction; headPosition = position} = head
     let newPosition = computeNextPosition position direction
-    {headPosition = newPosition; direction = direction}
+    {head with headPosition = newPosition}
 
 
 
@@ -67,12 +67,12 @@ let moveSnakeAndGrowIfStomachFull game  =
     match game with
         | Finished _ -> game
         | Running oldState ->
-            let {size= size;steps=steps; snake=lastSnake;foodOption = foodOption; points = points} = oldState
-            let {head = head; stomach = stomach} = lastSnake
+            let { snake=lastSnake } = oldState
+            let {head = head} = lastSnake
             let newHead = head |> computeNewHead 
             let newBody = lastSnake |> computeNewBody
-            let newSnake= {head=newHead; body=newBody; stomach = stomach}
-            let newState = {size=size;steps = steps ; snake=newSnake; foodOption = foodOption;points = points}
+            let newSnake= {lastSnake with head=newHead; body=newBody }
+            let newState = {oldState with snake=newSnake}
             newState |> (takeNewIfValid oldState)
 
                      

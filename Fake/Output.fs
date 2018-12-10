@@ -18,7 +18,7 @@ type Field = Symbol*Position
 let createSymbol gameState position = 
     let symbol = 
         let {snake=snake; foodOption=foodOption; size=size} = gameState
-        let {head={headPosition = headPosition;direction = _}; body=body} = snake
+        let {head={headPosition = headPosition}; body=body} = snake
         
         let isFood = checkIfIsFood foodOption
         let isHead position= 
